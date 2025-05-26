@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Player</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+    }
+    video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <video src="/videos/video.mp4" controls muted playsinline></video>
+  <script>
+    const video = document.querySelector('video');
+    console.log('=== Player Starting ===');
+    
+    // Get seek time from URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const seekTime = urlParams.get('seek');
+    
+    if (seekTime) {
+      console.log('Seek time from URL:', seekTime);
+      const seekTimeNum = parseFloat(seekTime);
+      
+      if (!isNaN(seekTimeNum)) {
+        // Wait for video to be fully loaded
+        video.addEventListener('loadeddata', () => {
+          console.log('Video data loaded, waiting 1 second before seeking...');
+          // Add a small delay to ensure video is ready
+          setTimeout(() => {
+            console.log('Seeking to:', seekTimeNum);
+            video.currentTime = seekTimeNum;
+            // Wait for seek to complete before playing
+            video.addEventListener('seeked', () => {
+              console.log('Seek completed, starting playback');
+              video.play().catch(error => console.error('Play failed:', error));
+            }, { once: true });
+          }, 1000);
+        });
+      }
+    } else {
+      // Just play the video if no seek time
+      video.play().catch(error => console.error('Play failed:', error));
+    }
+    
+    // Log video events
+    video.addEventListener('loadedmetadata', () => {
+      console.log('\n=== Video Metadata Loaded ===');
+      console.log('Duration:', video.duration);
+      console.log('Ready to play');
+    });
+    
+    video.addEventListener('play', () => {
+      console.log('\n=== Video Playing ===');
+      console.log('Current time:', video.currentTime);
+    });
+    
+    video.addEventListener('seeked', () => {
+      console.log('\n=== Seek Completed ===');
+      console.log('Current time:', video.currentTime);
+    });
+
+    // Add error handling
+    video.addEventListener('error', (error) => {
+      console.error('\n=== Video Error ===');
+      console.error('Error:', error);
+      console.error('Error code:', video.error.code);
+      console.error('Error message:', video.error.message);
+    });
+  </script>
+</body>
+</html> 
