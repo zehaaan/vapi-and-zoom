@@ -14,7 +14,8 @@ This project demonstrates the integration between Vapi AI and Zoom, showcasing h
 
 - Node.js (v14 or higher)
 - Vapi AI API key
-- Zoom API credentials
+ - n8n.io and automate from microsoft
+ - zooom desktop 
 
 ## Installation
 
@@ -32,7 +33,7 @@ npm install
 3. Create a `.env` file in the root directory and add your API keys:
 ```
 VAPI_API_KEY=your_vapi_key_here
-ZOOM_API_KEY=your_zoom_key_here
+
 ```
 
 ## Usage
